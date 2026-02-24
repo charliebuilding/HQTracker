@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hackney Quarter 2026 | Ticket Sales Tracker</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --fnl-neon-green: #39FF14;
@@ -38,7 +38,6 @@
             padding: 2rem;
         }
 
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -130,7 +129,6 @@
             color: var(--fnl-light-grey);
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -168,7 +166,6 @@
         .stat-card.yellow::before { background: linear-gradient(90deg, var(--fnl-yellow), var(--fnl-neon-orange)); }
         .stat-card.green::before { background: linear-gradient(90deg, var(--fnl-neon-green), var(--fnl-cyan)); }
         .stat-card.cyan::before { background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-electric-blue)); }
-        .stat-card.purple::before { background: linear-gradient(90deg, var(--fnl-purple-glow), var(--fnl-magenta)); }
 
         .stat-label {
             font-family: 'Space Grotesk', sans-serif;
@@ -193,7 +190,6 @@
         .stat-card.yellow .stat-value { color: var(--fnl-yellow); }
         .stat-card.green .stat-value { color: var(--fnl-neon-green); }
         .stat-card.cyan .stat-value { color: var(--fnl-cyan); }
-        .stat-card.purple .stat-value { color: var(--fnl-purple-glow); }
 
         .stat-change {
             font-family: 'Inter', sans-serif;
@@ -201,7 +197,6 @@
             color: var(--fnl-light-grey);
         }
 
-        /* Progress Section */
         .progress-section {
             background: rgba(26, 26, 26, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -246,19 +241,7 @@
             height: 100%;
             border-radius: 12px;
             transition: width 1s ease-out;
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .progress-bar.prev-cycle {
-            background: rgba(0, 255, 209, 0.3);
-            z-index: 1;
-        }
-
-        .progress-bar.this-cycle {
             background: var(--fnl-cyan);
-            z-index: 2;
             box-shadow: 0 0 20px rgba(0, 255, 209, 0.3);
         }
 
@@ -272,7 +255,6 @@
             font-weight: 500;
         }
 
-        /* Chart Section */
         .chart-section {
             background: rgba(26, 26, 26, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -327,9 +309,8 @@
 
         .legend-dot.cyan { background: var(--fnl-cyan); }
         .legend-dot.yellow { background: var(--fnl-yellow); }
-        .legend-dot.pink { background: transparent; border: 2px dashed var(--fnl-magenta); }
+        .legend-dot.pink { background: var(--fnl-magenta); }
 
-        /* Run Rate Grid */
         .run-rate-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -412,7 +393,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Tables */
         .table-section {
             background: rgba(26, 26, 26, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -479,7 +459,6 @@
         .status-dot.current { background: var(--fnl-cyan); animation: pulse 2s infinite; box-shadow: 0 0 8px var(--fnl-cyan); }
         .status-dot.future { background: var(--fnl-light-grey); }
 
-        /* Footer */
         .footer {
             text-align: center;
             padding-top: 2rem;
@@ -500,7 +479,6 @@
             font-weight: 700;
         }
 
-        /* Responsive */
         @media (max-width: 1000px) {
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
         }
@@ -537,7 +515,7 @@
                     <div class="logo-icon">FNL</div>
                 </div>
                 <h1>Hackney Quarter 2026</h1>
-                <p class="subtitle">Ticket Sales Tracker → 3,000 Target</p>
+                <p class="subtitle">Ticket Sales Tracker → 1,700 More Tickets Needed</p>
             </div>
             <div class="header-right">
                 <div class="live-badge">LIVE TRACKING</div>
@@ -548,65 +526,63 @@
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card cyan">
-                <div class="stat-label">Total Tickets Sold</div>
-                <div class="stat-value" id="totalTickets">1,300</div>
-                <div class="stat-change">1,099 prev + 201 this cycle</div>
-            </div>
-            <div class="stat-card purple">
-                <div class="stat-label">This Sales Cycle</div>
-                <div class="stat-value">201</div>
-                <div class="stat-change">Since 3 Feb 2026</div>
+                <div class="stat-label">Still To Sell</div>
+                <div class="stat-value" id="ticketsRemaining">1,700</div>
+                <div class="stat-change">From today</div>
             </div>
             <div class="stat-card yellow">
-                <div class="stat-label">Target</div>
-                <div class="stat-value">3,000</div>
-                <div class="stat-change">Event Day Goal</div>
+                <div class="stat-label">Current Pace</div>
+                <div class="stat-value" id="currentPaceDisplay">7.0</div>
+                <div class="stat-change">tickets/day (excl. launch)</div>
             </div>
             <div class="stat-card pink">
-                <div class="stat-label">Tickets Remaining</div>
-                <div class="stat-value" id="ticketsRemaining">1,700</div>
-                <div class="stat-change">to reach target</div>
+                <div class="stat-label">Required Pace</div>
+                <div class="stat-value" id="requiredPaceDisplay">23.6</div>
+                <div class="stat-change">tickets/day needed</div>
             </div>
             <div class="stat-card green">
                 <div class="stat-label">Days to Event</div>
                 <div class="stat-value" id="daysToEvent">72</div>
                 <div class="stat-change">7 May 2026</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-label">Projected Shortfall</div>
+                <div class="stat-value" id="shortfall" style="color: var(--fnl-magenta);">-1,196</div>
+                <div class="stat-change">at current pace</div>
+            </div>
         </div>
 
         <!-- Progress Bar -->
         <div class="progress-section">
             <div class="progress-header">
-                <h2 class="progress-title">Progress to 3,000</h2>
-                <div class="progress-pct" id="progressPct">43.3%</div>
+                <h2 class="progress-title">Projected Sales vs 1,700 Target</h2>
+                <div class="progress-pct" id="progressPct">0%</div>
             </div>
             <div class="progress-bar-container">
-                <div class="progress-bar prev-cycle" style="width: 36.6%"></div>
-                <div class="progress-bar this-cycle" style="left: 36.6%; width: 6.7%"></div>
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
             </div>
             <div class="progress-markers">
                 <span>0</span>
-                <span>750</span>
-                <span>1,500</span>
-                <span>2,250</span>
-                <span>3,000</span>
+                <span>425</span>
+                <span>850</span>
+                <span>1,275</span>
+                <span>1,700</span>
             </div>
             <p style="text-align: center; color: var(--fnl-light-grey); font-size: 0.75rem; margin-top: 0.75rem;">
-                Lighter = previous cycle (1,099) | Solid = this cycle (+201)
+                At current pace of 7.0/day, projected to sell ~504 more tickets (30% of target)
             </p>
         </div>
 
         <!-- Main Chart -->
         <div class="chart-section">
             <h3 class="chart-title">Sales Progress: Weeks to Event</h3>
-            <p class="chart-subtitle">X-axis = weeks until event day (7 May 2026) | This cycle launched 3 Feb</p>
+            <p class="chart-subtitle">X-axis = weeks until event day (7 May 2026) | Sales cycle launched 3 Feb</p>
             <div class="chart-container">
                 <canvas id="mainChart"></canvas>
             </div>
             <div class="legend">
-                <div class="legend-item"><div class="legend-dot cyan"></div> HQ 2026 Actual</div>
-                <div class="legend-item"><div class="legend-dot yellow"></div> Target Pace (3,000)</div>
-                <div class="legend-item"><div class="legend-dot pink"></div> HQ 2026 Projected</div>
+                <div class="legend-item"><div class="legend-dot pink"></div> Projected Sales (at current pace)</div>
+                <div class="legend-item"><div class="legend-dot yellow"></div> Target (1,700)</div>
             </div>
         </div>
 
@@ -615,27 +591,27 @@
             <div class="run-rate-section">
                 <div class="run-rate-label">Required Daily Run Rate</div>
                 <div class="run-rate-value" id="runRate">23.6</div>
-                <div class="run-rate-unit">tickets per day to hit 3,000</div>
+                <div class="run-rate-unit">tickets per day to sell 1,700 more</div>
                 <div class="run-rate-detail">
                     <div class="run-rate-item">
-                        <div class="run-rate-item-value" id="currentPace" style="color: var(--fnl-magenta);">9.6</div>
-                        <div class="run-rate-item-label">Current Pace (this cycle)</div>
+                        <div class="run-rate-item-value" id="currentPace" style="color: var(--fnl-magenta);">7.0</div>
+                        <div class="run-rate-item-label">Current Pace (excl. launch spike)</div>
                     </div>
                     <div class="run-rate-item">
                         <div class="run-rate-item-value" id="weeklyRequired">165</div>
                         <div class="run-rate-item-label">Weekly Target</div>
                     </div>
                     <div class="run-rate-item">
-                        <div class="run-rate-item-value" id="projectedFinal" style="color: var(--fnl-magenta);">1,991</div>
-                        <div class="run-rate-item-label">Projected at Current Pace</div>
+                        <div class="run-rate-item-value" id="projectedFinal" style="color: var(--fnl-magenta);">504</div>
+                        <div class="run-rate-item-label">Projected to Sell (at current pace)</div>
                     </div>
                 </div>
             </div>
 
             <div class="run-rate-section" style="border-color: rgba(255, 16, 240, 0.3);">
-                <div class="run-rate-label">Gender Breakdown</div>
+                <div class="run-rate-label">Gender Breakdown (This Cycle)</div>
                 <div class="run-rate-value" style="font-size: 2.5rem;">57% F</div>
-                <div class="run-rate-unit">Female participation (this cycle)</div>
+                <div class="run-rate-unit">Female participation</div>
                 <div class="run-rate-detail">
                     <div class="run-rate-item">
                         <div class="run-rate-item-value">114</div>
@@ -655,14 +631,14 @@
 
         <!-- Ticket Types -->
         <div class="table-section">
-            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Ticket Types (This Cycle)</h3>
+            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Ticket Types</h3>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
                             <th>Ticket Type</th>
                             <th class="right">Sold</th>
-                            <th class="right">% of Cycle</th>
+                            <th class="right">% of Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -687,7 +663,7 @@
                             <td class="right">0.5%</td>
                         </tr>
                         <tr style="border-top: 2px solid rgba(255, 255, 255, 0.1); font-weight: 700;">
-                            <td>TOTAL (This Cycle)</td>
+                            <td>TOTAL</td>
                             <td class="right" style="color: var(--fnl-cyan);">201</td>
                             <td class="right">100%</td>
                         </tr>
@@ -698,17 +674,17 @@
 
         <!-- Weekly Table -->
         <div class="table-section">
-            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Weekly Breakdown (This Cycle)</h3>
+            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Weekly Targets vs Projected (From Today)</h3>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
                             <th>Week</th>
                             <th>Date Range</th>
-                            <th class="right">Weekly Sales</th>
-                            <th class="right">Cumulative</th>
-                            <th class="right">Target</th>
-                            <th class="right">vs Target</th>
+                            <th class="right">Weekly Target</th>
+                            <th class="right">Target Cumulative</th>
+                            <th class="right">Projected Cumulative</th>
+                            <th class="right">Variance</th>
                         </tr>
                     </thead>
                     <tbody id="weeklyTable"></tbody>
@@ -719,7 +695,7 @@
         <!-- Footer -->
         <footer class="footer">
             <p><span class="brand">FRIDAY NIGHT LIGHTS</span> | Hackney Quarter 2026</p>
-            <p style="margin-top: 0.5rem;">Event Date: 7 May 2026 | This Cycle Launch: 3 February 2026</p>
+            <p style="margin-top: 0.5rem;">Event Date: 7 May 2026 | Sales Cycle Launch: 3 February 2026</p>
         </footer>
     </div>
 
@@ -728,15 +704,9 @@
         const launchDate = new Date('2026-02-03');
         const eventDate = new Date('2026-05-07');
         const today = new Date('2026-02-24');
-        const target = 3000;
+        const target = 1700;  // 1,700 MORE tickets needed from today
         
-        // Corrected: 1,700 remaining means 1,300 sold
-        const totalSold = 1300;
-        const prevCycleSales = 1099;  // 1300 - 201
-        const thisCycleSales = 201;
-        const ticketsRemaining = 1700;
-        
-        // This cycle sales by date
+        // Sales by date (used only to calculate current pace)
         const salesByDate = {
             '2026-02-03': 2,
             '2026-02-05': 5,
@@ -759,68 +729,65 @@
             '2026-02-23': 3
         };
         
+        // Calculate totals (for pace calculation only)
+        const totalSoldSoFar = Object.values(salesByDate).reduce((a, b) => a + b, 0);
+        
         // Calculate days
         const daysSinceLaunch = Math.floor((today - launchDate) / (1000 * 60 * 60 * 24));
         const daysToEvent = Math.floor((eventDate - today) / (1000 * 60 * 60 * 24));
         
-        // Run rates (this cycle only, excluding launch spike on 6 Feb)
-        const launchSpike = salesByDate['2026-02-06'] || 0; // 75
-        const sustainableSales = thisCycleSales - launchSpike;
+        // Run rates (excluding launch spike on 6 Feb)
+        const launchSpike = salesByDate['2026-02-06'] || 0;
+        const sustainableSales = totalSoldSoFar - launchSpike;
         const daysAfterSpike = daysSinceLaunch - 3;
         const currentDailyPace = sustainableSales / daysAfterSpike;
         
-        const requiredDailyRate = ticketsRemaining / daysToEvent;
+        // Target is 1,700 MORE from today
+        const requiredDailyRate = target / daysToEvent;
         const weeklyRequired = Math.ceil(requiredDailyRate * 7);
-        const projectedFinal = Math.round(totalSold + (currentDailyPace * daysToEvent));
+        
+        // Projected = how many MORE we'll sell at current pace
+        const projectedToSell = Math.round(currentDailyPace * daysToEvent);
+        const shortfall = projectedToSell - target;
+        
+        // Progress = 0% since we're starting from today
+        // (The bar will fill as actual sales come in - for now it's 0)
         
         // ============ UPDATE STATS ============
-        document.getElementById('totalTickets').textContent = totalSold.toLocaleString();
-        document.getElementById('ticketsRemaining').textContent = ticketsRemaining.toLocaleString();
+        document.getElementById('ticketsRemaining').textContent = target.toLocaleString();
         document.getElementById('daysToEvent').textContent = daysToEvent;
+        document.getElementById('currentPaceDisplay').textContent = currentDailyPace.toFixed(1);
+        document.getElementById('requiredPaceDisplay').textContent = requiredDailyRate.toFixed(1);
+        document.getElementById('shortfall').textContent = (shortfall >= 0 ? '+' : '') + shortfall.toLocaleString();
+        
         document.getElementById('runRate').textContent = requiredDailyRate.toFixed(1);
         document.getElementById('currentPace').textContent = currentDailyPace.toFixed(1);
         document.getElementById('weeklyRequired').textContent = weeklyRequired.toLocaleString();
-        document.getElementById('projectedFinal').textContent = projectedFinal.toLocaleString();
+        document.getElementById('projectedFinal').textContent = projectedToSell.toLocaleString();
         
-        const progressPct = ((totalSold / target) * 100).toFixed(1);
-        document.getElementById('progressPct').textContent = progressPct + '%';
+        document.getElementById('progressPct').textContent = '0%';
+        document.getElementById('progressBar').style.width = '0%';
         
         // ============ CHART ============
         const ctx = document.getElementById('mainChart').getContext('2d');
         
-        const weeksToEvent = ['13', '12', '11', '10', '9', '8', '6', '4', '2', '0'];
+        // X-axis: weeks to event (10 on left, 0 on right)
+        const weeksToEvent = ['10', '9', '8', '7', '6', '5', '4', '3', '2', '1', '0'];
         
-        const actual2026 = [
-            prevCycleSales,
-            prevCycleSales + 93,
-            prevCycleSales + 149,
-            totalSold,
-            null, null, null, null, null, null
-        ];
+        // Projected sales - accumulating over time (starts at 0, ends at projected total)
+        // Index 0 = 10 weeks out (just starting), Index 10 = event day (final total)
+        const projectedSales = weeksToEvent.map((w, i) => {
+            // i=0 is 10 weeks out, i=10 is event day
+            const weeksElapsed = i;  // 0 at start, 10 at end
+            const daysElapsed = weeksElapsed * 7;
+            return Math.round(currentDailyPace * Math.min(daysElapsed, daysToEvent));
+        });
         
-        const projected2026 = [
-            null, null, null,
-            totalSold,
-            Math.round(totalSold + currentDailyPace * 7),
-            Math.round(totalSold + currentDailyPace * 14),
-            Math.round(totalSold + currentDailyPace * 28),
-            Math.round(totalSold + currentDailyPace * 42),
-            Math.round(totalSold + currentDailyPace * 56),
-            Math.round(totalSold + currentDailyPace * daysToEvent)
-        ];
-        
-        const target2026 = [
-            prevCycleSales,
-            Math.round(prevCycleSales + (target - prevCycleSales) * (1/13)),
-            Math.round(prevCycleSales + (target - prevCycleSales) * (2/13)),
-            Math.round(prevCycleSales + (target - prevCycleSales) * (3/13)),
-            Math.round(prevCycleSales + (target - prevCycleSales) * (4/13)),
-            Math.round(prevCycleSales + (target - prevCycleSales) * (5/13)),
-            Math.round(prevCycleSales + (target - prevCycleSales) * (7/13)),
-            Math.round(prevCycleSales + (target - prevCycleSales) * (9/13)),
-            Math.round(prevCycleSales + (target - prevCycleSales) * (11/13)),
-            target
-        ];
+        // Target pace - linear from 0 to 1,700
+        const targetPace = weeksToEvent.map((w, i) => {
+            // i=0 is 10 weeks out (0 sold), i=10 is event day (1700 target)
+            return Math.round((target / 10) * i);
+        });
         
         new Chart(ctx, {
             type: 'line',
@@ -828,37 +795,26 @@
                 labels: weeksToEvent,
                 datasets: [
                     {
-                        label: 'HQ 2026 Actual',
-                        data: actual2026,
-                        borderColor: '#00FFD1',
-                        backgroundColor: 'rgba(0, 255, 209, 0.15)',
+                        label: 'Projected Sales (at current pace)',
+                        data: projectedSales,
+                        borderColor: '#FF006B',
+                        backgroundColor: 'rgba(255, 0, 107, 0.15)',
                         borderWidth: 3,
                         fill: true,
                         tension: 0.3,
-                        pointRadius: 6,
-                        pointBackgroundColor: '#00FFD1',
+                        pointRadius: 5,
+                        pointBackgroundColor: '#FF006B',
                         pointBorderColor: '#0A0A0A',
                         pointBorderWidth: 2,
                         pointHoverRadius: 8
                     },
                     {
-                        label: 'Target Pace (3,000)',
-                        data: target2026,
+                        label: 'Target (1,700)',
+                        data: targetPace,
                         borderColor: '#FFFF00',
                         backgroundColor: 'transparent',
                         borderWidth: 2,
                         tension: 0,
-                        pointRadius: 0,
-                        pointHoverRadius: 4
-                    },
-                    {
-                        label: 'HQ 2026 Projected',
-                        data: projected2026,
-                        borderColor: '#FF006B',
-                        backgroundColor: 'transparent',
-                        borderWidth: 2,
-                        borderDash: [6, 4],
-                        tension: 0.3,
                         pointRadius: 0,
                         pointHoverRadius: 4
                     }
@@ -871,7 +827,7 @@
                     x: {
                         title: {
                             display: true,
-                            text: '← Weeks to Event',
+                            text: 'Weeks to Event →',
                             color: '#B0B0B0',
                             font: { size: 12, family: 'Space Grotesk' }
                         },
@@ -884,10 +840,10 @@
                     },
                     y: {
                         min: 0,
-                        max: 3500,
+                        max: 2000,
                         ticks: { 
                             color: '#B0B0B0',
-                            stepSize: 500,
+                            stepSize: 400,
                             font: { family: 'Space Grotesk' }
                         },
                         grid: { color: 'rgba(255, 255, 255, 0.05)' }
@@ -922,6 +878,9 @@
         });
         
         // ============ WEEKLY TABLE ============
+        // Show weekly targets from today to hit 1,700
+        const tableBody = document.getElementById('weeklyTable');
+        
         function getWeekStart(date) {
             const d = new Date(date);
             const day = d.getDay();
@@ -933,8 +892,9 @@
             return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         }
         
+        // Generate weeks from today to event
         const weeks = [];
-        let currentWeekStart = getWeekStart(launchDate);
+        let currentWeekStart = getWeekStart(today);
         let weekNum = 1;
         
         while (currentWeekStart < eventDate) {
@@ -953,68 +913,39 @@
             weekNum++;
         }
         
-        let cumulativeTotal = prevCycleSales;
+        // Calculate targets and projections
+        const weeklyTarget = target / weeks.length;
+        const weeklyProjected = currentDailyPace * 7;
         
-        weeks.forEach(week => {
-            let weeklySales = 0;
+        weeks.forEach((week, i) => {
+            week.targetWeekly = Math.round(weeklyTarget);
+            week.targetCumulative = Math.round(weeklyTarget * (i + 1));
+            week.projectedWeekly = Math.round(weeklyProjected);
+            week.projectedCumulative = Math.round(weeklyProjected * (i + 1));
             
-            Object.entries(salesByDate).forEach(([dateStr, count]) => {
-                const saleDate = new Date(dateStr);
-                if (saleDate >= week.start && saleDate <= week.end) {
-                    weeklySales += count;
-                }
-            });
-            
-            week.sales = weeklySales;
-            cumulativeTotal += weeklySales;
-            week.cumulative = cumulativeTotal;
-            
-            if (week.end < today) {
-                week.status = 'complete';
-            } else if (week.start <= today && week.end >= today) {
+            if (i === 0) {
                 week.status = 'current';
             } else {
                 week.status = 'future';
             }
         });
         
-        const ticketsPerWeek = (target - prevCycleSales) / weeks.length;
-        weeks.forEach((week, i) => {
-            week.targetCumulative = Math.round(prevCycleSales + (ticketsPerWeek * (i + 1)));
-        });
-        
-        const tableBody = document.getElementById('weeklyTable');
-        
-        const prevRow = document.createElement('tr');
-        prevRow.innerHTML = `
-            <td><span class="status-dot complete"></span>Previous</td>
-            <td>Before 3 Feb</td>
-            <td class="right">${prevCycleSales.toLocaleString()}</td>
-            <td class="right" style="color: var(--fnl-cyan); font-weight: 600;">${prevCycleSales.toLocaleString()}</td>
-            <td class="right">—</td>
-            <td class="right">—</td>
-        `;
-        tableBody.appendChild(prevRow);
-        
-        const weeksToShow = weeks.filter(w => w.status !== 'future').concat(
-            weeks.filter(w => w.status === 'future').slice(0, 4)
-        );
-        
-        weeksToShow.forEach(week => {
+        // Show first 8 weeks
+        weeks.slice(0, 8).forEach(week => {
             const row = document.createElement('tr');
             if (week.status === 'current') row.className = 'current-week';
             if (week.status === 'future') row.className = 'future';
             
-            const variance = week.status !== 'future' ? week.cumulative - week.targetCumulative : '—';
-            const varianceColor = variance > 0 ? 'var(--fnl-neon-green)' : variance < 0 ? 'var(--fnl-magenta)' : 'var(--fnl-light-grey)';
-            const varianceText = typeof variance === 'number' ? (variance >= 0 ? '+' : '') + variance : variance;
+            const variance = week.projectedCumulative - week.targetCumulative;
+            const varianceColor = variance >= 0 ? 'var(--fnl-neon-green)' : 'var(--fnl-magenta)';
+            const varianceText = (variance >= 0 ? '+' : '') + variance;
             
             row.innerHTML = `
                 <td><span class="status-dot ${week.status}"></span>${week.label}</td>
                 <td>${week.dateRange}</td>
-                <td class="right">${week.status !== 'future' ? week.sales : '—'}</td>
-                <td class="right" style="color: var(--fnl-cyan); font-weight: 600;">${week.status !== 'future' ? week.cumulative.toLocaleString() : '—'}</td>
-                <td class="right">${week.targetCumulative.toLocaleString()}</td>
+                <td class="right">${week.targetWeekly}</td>
+                <td class="right" style="color: var(--fnl-yellow);">${week.targetCumulative.toLocaleString()}</td>
+                <td class="right" style="color: var(--fnl-magenta);">${week.projectedCumulative.toLocaleString()}</td>
                 <td class="right" style="color: ${varianceColor};">${varianceText}</td>
             `;
             tableBody.appendChild(row);
@@ -1026,9 +957,9 @@
             <td><strong>EVENT DAY</strong></td>
             <td>7 May 2026</td>
             <td class="right">—</td>
-            <td class="right" style="color: var(--fnl-yellow); font-weight: 700;">3,000</td>
-            <td class="right" style="font-weight: 700;">3,000</td>
-            <td class="right">—</td>
+            <td class="right" style="color: var(--fnl-yellow); font-weight: 700;">1,700</td>
+            <td class="right" style="color: var(--fnl-magenta); font-weight: 700;">${projectedToSell.toLocaleString()}</td>
+            <td class="right" style="color: var(--fnl-magenta); font-weight: 700;">${shortfall >= 0 ? '+' : ''}${shortfall.toLocaleString()}</td>
         `;
         tableBody.appendChild(finalRow);
     </script>
