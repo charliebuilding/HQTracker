@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackney Quarter 2026 | Ticket Sales Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fnl-neon-green: #39FF14;
+            --fnl-electric-pink: #FF10F0;
+            --fnl-deep-black: #0A0A0A;
+            --fnl-charcoal: #1A1A1A;
+            --fnl-neon-orange: #FF6B00;
+            --fnl-electric-blue: #00D4FF;
+            --fnl-purple-glow: #9D00FF;
+            --fnl-white: #FFFFFF;
+            --fnl-light-grey: #B0B0B0;
+            --fnl-cyan: #00FFD1;
+            --fnl-magenta: #FF006B;
+            --fnl-yellow: #FFFF00;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #1a0a3e 0%, #0d0520 30%, var(--fnl-deep-black) 100%);
+            color: var(--fnl-white);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--fnl-cyan), var(--fnl-magenta), var(--fnl-yellow));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: var(--fnl-deep-black);
+        }
+
+        .header-left h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-magenta), var(--fnl-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-left .subtitle {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--fnl-light-grey);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(57, 255, 20, 0.1);
+            border: 1px solid rgba(57, 255, 20, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--fnl-neon-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .live-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--fnl-neon-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px var(--fnl-neon-green);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .last-updated {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            color: var(--fnl-light-grey);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(0, 255, 209, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 209, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-magenta));
+        }
+
+        .stat-card.pink::before { background: linear-gradient(90deg, var(--fnl-magenta), var(--fnl-purple-glow)); }
+        .stat-card.yellow::before { background: linear-gradient(90deg, var(--fnl-yellow), var(--fnl-neon-orange)); }
+        .stat-card.green::before { background: linear-gradient(90deg, var(--fnl-neon-green), var(--fnl-cyan)); }
+        .stat-card.cyan::before { background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-electric-blue)); }
+        .stat-card.purple::before { background: linear-gradient(90deg, var(--fnl-purple-glow), var(--fnl-magenta)); }
+
+        .stat-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            color: var(--fnl-light-grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--fnl-white);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card.pink .stat-value { color: var(--fnl-magenta); }
+        .stat-card.yellow .stat-value { color: var(--fnl-yellow); }
+        .stat-card.green .stat-value { color: var(--fnl-neon-green); }
+        .stat-card.cyan .stat-value { color: var(--fnl-cyan); }
+        .stat-card.purple .stat-value { color: var(--fnl-purple-glow); }
+
+        .stat-change {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--fnl-light-grey);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .progress-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .progress-pct {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 1s ease-out;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .progress-bar.prev-cycle {
+            background: rgba(0, 255, 209, 0.3);
+            z-index: 1;
+        }
+
+        .progress-bar.this-cycle {
+            background: var(--fnl-cyan);
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0, 255, 209, 0.3);
+        }
+
+        .progress-markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            color: var(--fnl-light-grey);
+            font-weight: 500;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .chart-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: var(--fnl-light-grey);
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            height: 400px;
+            position: relative;
+        }
+
+        .legend {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            color: var(--fnl-light-grey);
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        .legend-dot.cyan { background: var(--fnl-cyan); }
+        .legend-dot.yellow { background: var(--fnl-yellow); }
+        .legend-dot.pink { background: transparent; border: 2px dashed var(--fnl-magenta); }
+
+        /* Run Rate Grid */
+        .run-rate-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .run-rate-section {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .run-rate-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-magenta), var(--fnl-yellow));
+        }
+
+        .run-rate-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            color: var(--fnl-light-grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .run-rate-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .run-rate-unit {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--fnl-light-grey);
+        }
+
+        .run-rate-detail {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .run-rate-item {
+            text-align: center;
+        }
+
+        .run-rate-item-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--fnl-white);
+        }
+
+        .run-rate-item-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            color: var(--fnl-light-grey);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tables */
+        .table-section {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--fnl-light-grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th.right { text-align: right; }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        td.right { text-align: right; }
+
+        tr:hover td {
+            background: rgba(0, 255, 209, 0.05);
+        }
+
+        tr.current-week td {
+            background: rgba(0, 255, 209, 0.1);
+        }
+
+        tr.future td {
+            color: var(--fnl-light-grey);
+            opacity: 0.6;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-dot.complete { background: var(--fnl-neon-green); box-shadow: 0 0 8px var(--fnl-neon-green); }
+        .status-dot.current { background: var(--fnl-cyan); animation: pulse 2s infinite; box-shadow: 0 0 8px var(--fnl-cyan); }
+        .status-dot.future { background: var(--fnl-light-grey); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            color: var(--fnl-light-grey);
+        }
+
+        .footer .brand {
+            background: linear-gradient(90deg, var(--fnl-cyan), var(--fnl-magenta), var(--fnl-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .header { flex-direction: column; gap: 1rem; }
+            .header-right { text-align: left; }
+            .header-left h1 { font-size: 1.75rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .stat-value { font-size: 1.75rem; }
+            .run-rate-grid { grid-template-columns: 1fr; }
+            .run-rate-value { font-size: 3rem; }
+            .chart-container { height: 300px; }
+            .legend { gap: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .header-left h1 { font-size: 1.5rem; }
+            .stats-grid { gap: 0.75rem; }
+            .stat-card { padding: 1rem; }
+            .stat-value { font-size: 1.5rem; }
+            .run-rate-value { font-size: 2.5rem; }
+            .chart-container { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <div class="logo-icon">FNL</div>
+                </div>
+                <h1>Hackney Quarter 2026</h1>
+                <p class="subtitle">Ticket Sales Tracker → 3,000 Target</p>
+            </div>
+            <div class="header-right">
+                <div class="live-badge">LIVE TRACKING</div>
+                <p class="last-updated">Last Updated: 24 Feb 2026</p>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card cyan">
+                <div class="stat-label">Total Tickets Sold</div>
+                <div class="stat-value" id="totalTickets">1,300</div>
+                <div class="stat-change">1,099 prev + 201 this cycle</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-label">This Sales Cycle</div>
+                <div class="stat-value">201</div>
+                <div class="stat-change">Since 3 Feb 2026</div>
+            </div>
+            <div class="stat-card yellow">
+                <div class="stat-label">Target</div>
+                <div class="stat-value">3,000</div>
+                <div class="stat-change">Event Day Goal</div>
+            </div>
+            <div class="stat-card pink">
+                <div class="stat-label">Tickets Remaining</div>
+                <div class="stat-value" id="ticketsRemaining">1,700</div>
+                <div class="stat-change">to reach target</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-label">Days to Event</div>
+                <div class="stat-value" id="daysToEvent">72</div>
+                <div class="stat-change">7 May 2026</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <h2 class="progress-title">Progress to 3,000</h2>
+                <div class="progress-pct" id="progressPct">43.3%</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar prev-cycle" style="width: 36.6%"></div>
+                <div class="progress-bar this-cycle" style="left: 36.6%; width: 6.7%"></div>
+            </div>
+            <div class="progress-markers">
+                <span>0</span>
+                <span>750</span>
+                <span>1,500</span>
+                <span>2,250</span>
+                <span>3,000</span>
+            </div>
+            <p style="text-align: center; color: var(--fnl-light-grey); font-size: 0.75rem; margin-top: 0.75rem;">
+                Lighter = previous cycle (1,099) | Solid = this cycle (+201)
+            </p>
+        </div>
+
+        <!-- Main Chart -->
+        <div class="chart-section">
+            <h3 class="chart-title">Sales Progress: Weeks to Event</h3>
+            <p class="chart-subtitle">X-axis = weeks until event day (7 May 2026) | This cycle launched 3 Feb</p>
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot cyan"></div> HQ 2026 Actual</div>
+                <div class="legend-item"><div class="legend-dot yellow"></div> Target Pace (3,000)</div>
+                <div class="legend-item"><div class="legend-dot pink"></div> HQ 2026 Projected</div>
+            </div>
+        </div>
+
+        <!-- Run Rate Cards -->
+        <div class="run-rate-grid">
+            <div class="run-rate-section">
+                <div class="run-rate-label">Required Daily Run Rate</div>
+                <div class="run-rate-value" id="runRate">23.6</div>
+                <div class="run-rate-unit">tickets per day to hit 3,000</div>
+                <div class="run-rate-detail">
+                    <div class="run-rate-item">
+                        <div class="run-rate-item-value" id="currentPace" style="color: var(--fnl-magenta);">9.6</div>
+                        <div class="run-rate-item-label">Current Pace (this cycle)</div>
+                    </div>
+                    <div class="run-rate-item">
+                        <div class="run-rate-item-value" id="weeklyRequired">165</div>
+                        <div class="run-rate-item-label">Weekly Target</div>
+                    </div>
+                    <div class="run-rate-item">
+                        <div class="run-rate-item-value" id="projectedFinal" style="color: var(--fnl-magenta);">1,991</div>
+                        <div class="run-rate-item-label">Projected at Current Pace</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="run-rate-section" style="border-color: rgba(255, 16, 240, 0.3);">
+                <div class="run-rate-label">Gender Breakdown</div>
+                <div class="run-rate-value" style="font-size: 2.5rem;">57% F</div>
+                <div class="run-rate-unit">Female participation (this cycle)</div>
+                <div class="run-rate-detail">
+                    <div class="run-rate-item">
+                        <div class="run-rate-item-value">114</div>
+                        <div class="run-rate-item-label">Female (56.7%)</div>
+                    </div>
+                    <div class="run-rate-item">
+                        <div class="run-rate-item-value">86</div>
+                        <div class="run-rate-item-label">Male (42.8%)</div>
+                    </div>
+                    <div class="run-rate-item">
+                        <div class="run-rate-item-value">1</div>
+                        <div class="run-rate-item-label">Non-binary (0.5%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ticket Types -->
+        <div class="table-section">
+            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Ticket Types (This Cycle)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket Type</th>
+                            <th class="right">Sold</th>
+                            <th class="right">% of Cycle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Early Access</td>
+                            <td class="right" style="color: var(--fnl-cyan); font-weight: 600;">105</td>
+                            <td class="right">52.2%</td>
+                        </tr>
+                        <tr>
+                            <td>First Release</td>
+                            <td class="right" style="color: var(--fnl-cyan); font-weight: 600;">94</td>
+                            <td class="right">46.8%</td>
+                        </tr>
+                        <tr>
+                            <td>Second Release</td>
+                            <td class="right">1</td>
+                            <td class="right">0.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Final Release</td>
+                            <td class="right">1</td>
+                            <td class="right">0.5%</td>
+                        </tr>
+                        <tr style="border-top: 2px solid rgba(255, 255, 255, 0.1); font-weight: 700;">
+                            <td>TOTAL (This Cycle)</td>
+                            <td class="right" style="color: var(--fnl-cyan);">201</td>
+                            <td class="right">100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Weekly Table -->
+        <div class="table-section">
+            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Weekly Breakdown (This Cycle)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th>Date Range</th>
+                            <th class="right">Weekly Sales</th>
+                            <th class="right">Cumulative</th>
+                            <th class="right">Target</th>
+                            <th class="right">vs Target</th>
+                        </tr>
+                    </thead>
+                    <tbody id="weeklyTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p><span class="brand">FRIDAY NIGHT LIGHTS</span> | Hackney Quarter 2026</p>
+            <p style="margin-top: 0.5rem;">Event Date: 7 May 2026 | This Cycle Launch: 3 February 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // ============ CONFIG ============
+        const launchDate = new Date('2026-02-03');
+        const eventDate = new Date('2026-05-07');
+        const today = new Date('2026-02-24');
+        const target = 3000;
+        
+        // Corrected: 1,700 remaining means 1,300 sold
+        const totalSold = 1300;
+        const prevCycleSales = 1099;  // 1300 - 201
+        const thisCycleSales = 201;
+        const ticketsRemaining = 1700;
+        
+        // This cycle sales by date
+        const salesByDate = {
+            '2026-02-03': 2,
+            '2026-02-05': 5,
+            '2026-02-06': 75,
+            '2026-02-07': 15,
+            '2026-02-08': 11,
+            '2026-02-09': 11,
+            '2026-02-10': 13,
+            '2026-02-11': 7,
+            '2026-02-13': 6,
+            '2026-02-14': 14,
+            '2026-02-15': 4,
+            '2026-02-16': 8,
+            '2026-02-17': 4,
+            '2026-02-18': 1,
+            '2026-02-19': 9,
+            '2026-02-20': 3,
+            '2026-02-21': 4,
+            '2026-02-22': 6,
+            '2026-02-23': 3
+        };
+        
+        // Calculate days
+        const daysSinceLaunch = Math.floor((today - launchDate) / (1000 * 60 * 60 * 24));
+        const daysToEvent = Math.floor((eventDate - today) / (1000 * 60 * 60 * 24));
+        
+        // Run rates (this cycle only, excluding launch spike on 6 Feb)
+        const launchSpike = salesByDate['2026-02-06'] || 0; // 75
+        const sustainableSales = thisCycleSales - launchSpike;
+        const daysAfterSpike = daysSinceLaunch - 3;
+        const currentDailyPace = sustainableSales / daysAfterSpike;
+        
+        const requiredDailyRate = ticketsRemaining / daysToEvent;
+        const weeklyRequired = Math.ceil(requiredDailyRate * 7);
+        const projectedFinal = Math.round(totalSold + (currentDailyPace * daysToEvent));
+        
+        // ============ UPDATE STATS ============
+        document.getElementById('totalTickets').textContent = totalSold.toLocaleString();
+        document.getElementById('ticketsRemaining').textContent = ticketsRemaining.toLocaleString();
+        document.getElementById('daysToEvent').textContent = daysToEvent;
+        document.getElementById('runRate').textContent = requiredDailyRate.toFixed(1);
+        document.getElementById('currentPace').textContent = currentDailyPace.toFixed(1);
+        document.getElementById('weeklyRequired').textContent = weeklyRequired.toLocaleString();
+        document.getElementById('projectedFinal').textContent = projectedFinal.toLocaleString();
+        
+        const progressPct = ((totalSold / target) * 100).toFixed(1);
+        document.getElementById('progressPct').textContent = progressPct + '%';
+        
+        // ============ CHART ============
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        
+        const weeksToEvent = ['13', '12', '11', '10', '9', '8', '6', '4', '2', '0'];
+        
+        const actual2026 = [
+            prevCycleSales,
+            prevCycleSales + 93,
+            prevCycleSales + 149,
+            totalSold,
+            null, null, null, null, null, null
+        ];
+        
+        const projected2026 = [
+            null, null, null,
+            totalSold,
+            Math.round(totalSold + currentDailyPace * 7),
+            Math.round(totalSold + currentDailyPace * 14),
+            Math.round(totalSold + currentDailyPace * 28),
+            Math.round(totalSold + currentDailyPace * 42),
+            Math.round(totalSold + currentDailyPace * 56),
+            Math.round(totalSold + currentDailyPace * daysToEvent)
+        ];
+        
+        const target2026 = [
+            prevCycleSales,
+            Math.round(prevCycleSales + (target - prevCycleSales) * (1/13)),
+            Math.round(prevCycleSales + (target - prevCycleSales) * (2/13)),
+            Math.round(prevCycleSales + (target - prevCycleSales) * (3/13)),
+            Math.round(prevCycleSales + (target - prevCycleSales) * (4/13)),
+            Math.round(prevCycleSales + (target - prevCycleSales) * (5/13)),
+            Math.round(prevCycleSales + (target - prevCycleSales) * (7/13)),
+            Math.round(prevCycleSales + (target - prevCycleSales) * (9/13)),
+            Math.round(prevCycleSales + (target - prevCycleSales) * (11/13)),
+            target
+        ];
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: weeksToEvent,
+                datasets: [
+                    {
+                        label: 'HQ 2026 Actual',
+                        data: actual2026,
+                        borderColor: '#00FFD1',
+                        backgroundColor: 'rgba(0, 255, 209, 0.15)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#00FFD1',
+                        pointBorderColor: '#0A0A0A',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Target Pace (3,000)',
+                        data: target2026,
+                        borderColor: '#FFFF00',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        tension: 0,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    },
+                    {
+                        label: 'HQ 2026 Projected',
+                        data: projected2026,
+                        borderColor: '#FF006B',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [6, 4],
+                        tension: 0.3,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '← Weeks to Event',
+                            color: '#B0B0B0',
+                            font: { size: 12, family: 'Space Grotesk' }
+                        },
+                        ticks: { 
+                            color: '#B0B0B0',
+                            maxRotation: 0,
+                            font: { size: 11, family: 'Space Grotesk' }
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    },
+                    y: {
+                        min: 0,
+                        max: 3500,
+                        ticks: { 
+                            color: '#B0B0B0',
+                            stepSize: 500,
+                            font: { family: 'Space Grotesk' }
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A1A',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#B0B0B0',
+                        borderColor: 'rgba(0, 255, 209, 0.3)',
+                        borderWidth: 1,
+                        titleFont: { family: 'Space Grotesk', weight: 'bold' },
+                        bodyFont: { family: 'Space Grotesk' },
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].label + ' weeks to event';
+                            },
+                            label: function(context) {
+                                if (context.parsed.y === null) return null;
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' tickets';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+        
+        // ============ WEEKLY TABLE ============
+        function getWeekStart(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(d.setDate(diff));
+        }
+        
+        function formatDate(date) {
+            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        }
+        
+        const weeks = [];
+        let currentWeekStart = getWeekStart(launchDate);
+        let weekNum = 1;
+        
+        while (currentWeekStart < eventDate) {
+            const weekEnd = new Date(currentWeekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+            
+            weeks.push({
+                num: weekNum,
+                start: new Date(currentWeekStart),
+                end: weekEnd > eventDate ? eventDate : weekEnd,
+                label: `W${weekNum}`,
+                dateRange: `${formatDate(currentWeekStart)} - ${formatDate(weekEnd > eventDate ? eventDate : weekEnd)}`
+            });
+            
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            weekNum++;
+        }
+        
+        let cumulativeTotal = prevCycleSales;
+        
+        weeks.forEach(week => {
+            let weeklySales = 0;
+            
+            Object.entries(salesByDate).forEach(([dateStr, count]) => {
+                const saleDate = new Date(dateStr);
+                if (saleDate >= week.start && saleDate <= week.end) {
+                    weeklySales += count;
+                }
+            });
+            
+            week.sales = weeklySales;
+            cumulativeTotal += weeklySales;
+            week.cumulative = cumulativeTotal;
+            
+            if (week.end < today) {
+                week.status = 'complete';
+            } else if (week.start <= today && week.end >= today) {
+                week.status = 'current';
+            } else {
+                week.status = 'future';
+            }
+        });
+        
+        const ticketsPerWeek = (target - prevCycleSales) / weeks.length;
+        weeks.forEach((week, i) => {
+            week.targetCumulative = Math.round(prevCycleSales + (ticketsPerWeek * (i + 1)));
+        });
+        
+        const tableBody = document.getElementById('weeklyTable');
+        
+        const prevRow = document.createElement('tr');
+        prevRow.innerHTML = `
+            <td><span class="status-dot complete"></span>Previous</td>
+            <td>Before 3 Feb</td>
+            <td class="right">${prevCycleSales.toLocaleString()}</td>
+            <td class="right" style="color: var(--fnl-cyan); font-weight: 600;">${prevCycleSales.toLocaleString()}</td>
+            <td class="right">—</td>
+            <td class="right">—</td>
+        `;
+        tableBody.appendChild(prevRow);
+        
+        const weeksToShow = weeks.filter(w => w.status !== 'future').concat(
+            weeks.filter(w => w.status === 'future').slice(0, 4)
+        );
+        
+        weeksToShow.forEach(week => {
+            const row = document.createElement('tr');
+            if (week.status === 'current') row.className = 'current-week';
+            if (week.status === 'future') row.className = 'future';
+            
+            const variance = week.status !== 'future' ? week.cumulative - week.targetCumulative : '—';
+            const varianceColor = variance > 0 ? 'var(--fnl-neon-green)' : variance < 0 ? 'var(--fnl-magenta)' : 'var(--fnl-light-grey)';
+            const varianceText = typeof variance === 'number' ? (variance >= 0 ? '+' : '') + variance : variance;
+            
+            row.innerHTML = `
+                <td><span class="status-dot ${week.status}"></span>${week.label}</td>
+                <td>${week.dateRange}</td>
+                <td class="right">${week.status !== 'future' ? week.sales : '—'}</td>
+                <td class="right" style="color: var(--fnl-cyan); font-weight: 600;">${week.status !== 'future' ? week.cumulative.toLocaleString() : '—'}</td>
+                <td class="right">${week.targetCumulative.toLocaleString()}</td>
+                <td class="right" style="color: ${varianceColor};">${varianceText}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+        
+        const finalRow = document.createElement('tr');
+        finalRow.style.borderTop = '2px solid rgba(255, 255, 255, 0.1)';
+        finalRow.innerHTML = `
+            <td><strong>EVENT DAY</strong></td>
+            <td>7 May 2026</td>
+            <td class="right">—</td>
+            <td class="right" style="color: var(--fnl-yellow); font-weight: 700;">3,000</td>
+            <td class="right" style="font-weight: 700;">3,000</td>
+            <td class="right">—</td>
+        `;
+        tableBody.appendChild(finalRow);
+    </script>
+</body>
+</html>
