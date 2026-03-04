@@ -519,7 +519,7 @@
             </div>
             <div class="header-right">
                 <div class="live-badge">LIVE TRACKING</div>
-                <p class="last-updated">Last Updated: 24 Feb 2026</p>
+                <p class="last-updated">Last Updated: 4 Mar 2026</p>
             </div>
         </header>
 
@@ -532,22 +532,22 @@
             </div>
             <div class="stat-card yellow">
                 <div class="stat-label">Current Pace</div>
-                <div class="stat-value" id="currentPaceDisplay">7.0</div>
+                <div class="stat-value" id="currentPaceDisplay">5.3</div>
                 <div class="stat-change">tickets/day (excl. launch)</div>
             </div>
             <div class="stat-card pink">
                 <div class="stat-label">Required Pace</div>
-                <div class="stat-value" id="requiredPaceDisplay">23.6</div>
+                <div class="stat-value" id="requiredPaceDisplay">26.6</div>
                 <div class="stat-change">tickets/day needed</div>
             </div>
             <div class="stat-card green">
                 <div class="stat-label">Days to Event</div>
-                <div class="stat-value" id="daysToEvent">72</div>
+                <div class="stat-value" id="daysToEvent">64</div>
                 <div class="stat-change">7 May 2026</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Projected Shortfall</div>
-                <div class="stat-value" id="shortfall" style="color: var(--fnl-magenta);">-1,196</div>
+                <div class="stat-value" id="shortfall" style="color: var(--fnl-magenta);">-1,361</div>
                 <div class="stat-change">at current pace</div>
             </div>
         </div>
@@ -569,7 +569,7 @@
                 <span>1,700</span>
             </div>
             <p style="text-align: center; color: var(--fnl-light-grey); font-size: 0.75rem; margin-top: 0.75rem;">
-                At current pace of 7.0/day, projected to sell ~504 more tickets (30% of target)
+                At current pace of 5.3/day, projected to sell ~339 more tickets (20% of target)
             </p>
         </div>
 
@@ -590,11 +590,11 @@
         <div class="run-rate-grid">
             <div class="run-rate-section">
                 <div class="run-rate-label">Required Daily Run Rate</div>
-                <div class="run-rate-value" id="runRate">23.6</div>
+                <div class="run-rate-value" id="runRate">26.6</div>
                 <div class="run-rate-unit">tickets per day to sell 1,700 more</div>
                 <div class="run-rate-detail">
                     <div class="run-rate-item">
-                        <div class="run-rate-item-value" id="currentPace" style="color: var(--fnl-magenta);">7.0</div>
+                        <div class="run-rate-item-value" id="currentPace" style="color: var(--fnl-magenta);">5.3</div>
                         <div class="run-rate-item-label">Current Pace (excl. launch spike)</div>
                     </div>
                     <div class="run-rate-item">
@@ -703,10 +703,10 @@
         // ============ CONFIG ============
         const launchDate = new Date('2026-02-03');
         const eventDate = new Date('2026-05-07');
-        const today = new Date('2026-02-24');
+        const today = new Date('2026-03-04');
         const target = 1700;  // 1,700 MORE tickets needed from today
         
-        // Sales by date (used only to calculate current pace)
+        // Sales by date (this cycle - 3 Feb onwards)
         const salesByDate = {
             '2026-02-03': 2,
             '2026-02-05': 5,
@@ -726,7 +726,14 @@
             '2026-02-20': 3,
             '2026-02-21': 4,
             '2026-02-22': 6,
-            '2026-02-23': 3
+            '2026-02-23': 3,
+            '2026-02-25': 7,
+            '2026-02-26': 4,
+            '2026-02-27': 1,
+            '2026-02-28': 5,
+            '2026-03-01': 3,
+            '2026-03-02': 1,
+            '2026-03-03': 2
         };
         
         // Calculate totals (for pace calculation only)
